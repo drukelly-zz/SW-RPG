@@ -7,7 +7,12 @@ body {
   font-family: 'Space Mono', monospace;
 }
 
-.player img,
-.enemy img {
+#heroes img,
+#villains img {
+  width: 64px;
+}
+
+.hero img,
+.villain img {
   width: 220px;
 }
