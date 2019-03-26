@@ -16,3 +16,7 @@ body {
 .villain img {
   width: 220px;
 }
+
+.hide {
+  display: none;
+}
