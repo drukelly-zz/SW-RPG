@@ -3,11 +3,11 @@ body {
   height: 100%;
 }
 
-body {
-  background: url("../images/sw-bg.jpg") no-repeat top center;
-  background-size: contain;
-}
-
 .space-mono {
   font-family: 'Space Mono', monospace;
+}
+
+.player img,
+.enemy img {
+  width: 220px;
 }
