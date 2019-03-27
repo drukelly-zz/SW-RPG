@@ -1,15 +1,14 @@
-// TODO:
+// TODO
 // Research and refactor to make switch cases code blocks dynamic
+// Not sure I'm digging these `switch` code blocks
 
 $(function(){
   let heroes = ["Han Solo", "Luke Skywalker"],
       villains = ["Boba Fett", "Darth Vader"];
-
   let hps = {},
       damages = {},
       selectedHero,
       selectedVillain;
-
   let BobaFett = {
     class:      "Villain",
     hp:         100,
@@ -54,7 +53,6 @@ $(function(){
       return Math.floor(Math.random() * (this.attackMax - 1)) + 1;
     }
   }
-
   // attack
   // takes two  args: player and enemy
   const attack = (player, enemy) => {
@@ -162,10 +160,10 @@ $(function(){
     if (enemyHP) hps["enemy"] = enemyHP;
     return hps;
   }
+  // update HP based on attack interaction
   const updateHP = (player, enemy) => {
     let playerPlaceholder = $(`#${player.replace(" ", "")}`);
     let enemyPlaceholder = $(`#${enemy.replace(" ", "")}`);
-
     // update player hp bar
     // get total hp first
     let playerTotalHP,
@@ -185,17 +183,15 @@ $(function(){
       case "Darth Vader":
         enemyTotalHP = DarthVader.getHP();
     }
-
     // calculate and reduce hp based on inflicted damage
     // holy back ticks, curly braces, square brackets and parentheses!
-    // at least it works?
     let playerDamaged = (hps["player"]/playerTotalHP)*100;
     playerPlaceholder
       .children().css({"width" : `calc(${playerDamaged}% - 4px)`});
     let enemyDamaged = (hps["enemy"]/enemyTotalHP)*100;
     enemyPlaceholder
       .children().css({"width" : `calc(${enemyDamaged}% - 4px)`});
-
+    // update hp text
     playerPlaceholder.next().find(".hpCount").text(hps["player"]);
     enemyPlaceholder.next().find(".hpCount").text(hps["enemy"]);
   }
