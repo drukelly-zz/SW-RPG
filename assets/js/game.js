@@ -166,14 +166,35 @@ $(function(){
     let playerPlaceholder = $(`#${player.replace(" ", "")}`);
     let enemyPlaceholder = $(`#${enemy.replace(" ", "")}`);
 
-    // TODO
     // update player hp bar
+    // get total hp first
+    let playerTotalHP,
+        enemyTotalHP;
+    switch (player) {
+      case "Han Solo":
+        playerTotalHP = HanSolo.getHP(); 
+        break;
+      case "Luke Skywalker":
+        playerTotalHP = LukeSkywalker.getHP();
+        break;
+    }
+    switch (enemy) {
+      case "Boba Fett":
+        enemyTotalHP = BobaFett.getHP(); 
+        break;
+      case "Darth Vader":
+        enemyTotalHP = DarthVader.getHP();
+    }
+
+    // calculate and reduce hp based on inflicted damage
+    // holy back ticks, curly braces, square brackets and parentheses!
+    // at least it works?
+    let playerDamaged = (hps["player"]/playerTotalHP)*100;
     playerPlaceholder
-      .children().css({"width": "calc(50% - 4px)"});
-    // TODO
-    // update enemy hp bar
+      .children().css({"width" : `calc(${playerDamaged}% - 4px)`});
+    let enemyDamaged = (hps["enemy"]/enemyTotalHP)*100;
     enemyPlaceholder
-      .children().css({"width": "calc(50% - 4px)"});
+      .children().css({"width" : `calc(${enemyDamaged}% - 4px)`});
 
     playerPlaceholder.next().find(".hpCount").text(hps["player"]);
     enemyPlaceholder.next().find(".hpCount").text(hps["enemy"]);
