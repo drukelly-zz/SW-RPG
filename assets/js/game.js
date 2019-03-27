@@ -1,8 +1,11 @@
+// TODO:
+// Research and refactor to make switch cases code blocks dynamic
+
 $(function(){
   let heroes = ["Han Solo", "Luke Skywalker"],
       villains = ["Boba Fett", "Darth Vader"];
 
-  let attackPower,
+  let hps = {},
       selectedHero,
       selectedVillain;
 
@@ -50,29 +53,35 @@ $(function(){
       return Math.floor(Math.random() * (this.attackMax - 1)) + 1;
     }
   }
+
+  // attack
+  // takes two args: player and enemy
   const attack = (player, enemy) => {
     let template,
         playerHPAttack,
         enemyHPAttack;
-
-    if (player === "Han Solo") {
-      playerHPAttack = HanSolo.getAttack();
+    switch (player) {
+      case "Han Solo":
+        playerHPAttack = HanSolo.getAttack();
+        break;
+      case "Luke Skywalker":
+        playerHPAttack =  LukeSkywalker.getAttack();
+        break;
     }
-    if (player === "Luke Skywalker") {
-      playerHPAttack =  LukeSkywalker.getAttack();
+    switch (enemy) {
+      case "Boba Fett":
+        enemyHPAttack =  BobaFett.getAttack();
+        break;
+      case "Darth Vader":
+        enemyHPAttack =  DarthVader.getAttack();
+        break;
     }
-    if (enemy === "Boba Fett") {
-      enemyHPAttack = BobaFett.getAttack();
-    }
-    if (enemy === "Darth Vader") {
-      enemyHPAttack = DarthVader.getAttack();
-    }
-
     template = `<li><strong class="playerLabel">${player}</strong> attacked <strong class="enemyLabel">${enemy}</strong> for ${playerHPAttack} points</li>`;
     template += `<li><strong class="enemyLabel">${enemy}</strong> attacked <strong class="playerLabel">${player}</strong> for ${enemyHPAttack} points</li>`;
-
     $("#playByPlay").append(template);
   }
+  // displays stats
+  // takes two args: the target selector and selected player
   const displayStats = (selector, player) => {
     let template;
     switch (player) {
@@ -118,11 +127,34 @@ $(function(){
         break;
     }
   }
+  // update figure tag with the selected character
   const selectCharacter = (selector, player) => {
     let template = `<img src="assets/images/${player.replace(" ", "-").toLowerCase()}.jpg" alt="${player}" class="border border-light">`; 
     $(selector).find("figure").html(template);
   }
-
+  // store HPs into memory
+  const storeHPs = (character) => {
+    let playerHP,
+        enemyHP;
+    switch (character) {
+      case "Han Solo":
+        playerHP = HanSolo.getHP();
+        break;
+      case "Luke Skywalker":
+        playerHP = LukeSkywalker.getHP();
+        break;
+      case "Boba Fett":
+        enemyHP = BobaFett.getHP();
+        break;
+      case "Darth Vader":
+        enemyHP = DarthVader.getHP();
+        break;
+    }
+    if (playerHP) hps["player"] = playerHP;
+    if (enemyHP) hps["enemy"] = enemyHP;
+    // console.log(hps);
+    return hps;
+  }
   // render heroes list items
   $.each(heroes, (index, value) => {
     let template =
@@ -143,7 +175,7 @@ $(function(){
       </li>`;
     $("#villains").append(template);
   });
-  // character select
+  // character select on click
   $(".character").on("click", (event) => {
     event.preventDefault();
     if (event.currentTarget.dataset.characterType === "hero") {
@@ -151,11 +183,15 @@ $(function(){
       $(".controls").removeClass("hide");
       selectedHero = event.currentTarget.dataset.character;
       displayStats(".hero", selectedHero);
+      storeHPs(selectedHero);
+      console.log(hps)
     }
     if (event.currentTarget.dataset.characterType === "villain") {
       selectCharacter(".villain", event.currentTarget.dataset.character);
       selectedVillain = event.currentTarget.dataset.character;
       displayStats(".villain", selectedVillain);
+      storeHPs(selectedVillain);
+      console.log(hps)
     }
   });
   // attack!
