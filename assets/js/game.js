@@ -54,18 +54,47 @@ $(function(){
 
   }
   const displayStats = (selector, player) => {
+    let template;
     switch (player) {
       case "Boba Fett":
-        $(selector).find('.stats').text(BobaFett.getHP());
+        template = `<div class="lifeBar">
+                      <div style="width: calc(100% - 4px)"></div>
+                    </div>
+                    <div class="d-flex row">
+                      <div class="col-8">${player}</div>
+                      <div class="col-4 hpCount space-mono text-right">${BobaFett.getHP()}</div>
+                    </div>`;
+        $(selector).find('.stats').html(template);
         break;
       case "Darth Vader":
-        $(selector).find('.stats').text(DarthVader.getHP());
+        template = `<div class="lifeBar">
+                      <div style="width: calc(100% - 4px)"></div>
+                    </div>
+                    <div class="d-flex row">
+                      <div class="col-8">${player}</div>
+                      <div class="col-4 hpCount space-mono text-right">${DarthVader.getHP()}</div>
+                    </div>`;
+        $(selector).find('.stats').html(template);
         break;
       case "Han Solo":
-        $(selector).find('.stats').text(HanSolo.getHP());
+        template = `<div class="lifeBar">
+                      <div style="width: calc(100% - 4px)"></div>
+                    </div>
+                    <div class="d-flex row">
+                      <div class="col-8">${player}</div>
+                      <div class="col-4 hpCount space-mono text-right">${HanSolo.getHP()}</div>
+                    </div>`;
+        $(selector).find('.stats').html(template);
         break;
       case "Luke Skywalker":
-        $(selector).find('.stats').text(LukeSkywalker.getHP());
+        template = `<div class="lifeBar">
+                      <div style="width: calc(100% - 4px)"></div>
+                    </div>
+                    <div class="d-flex row">
+                      <div class="col-8">${player}</div>
+                      <div class="col-4 hpCount space-mono text-right">${LukeSkywalker.getHP()}</div>
+                    </div>`;
+        $(selector).find('.stats').html(template);
         break;
     }
   }
