@@ -6,12 +6,13 @@ $(function(){
       villains = ["Boba Fett", "Darth Vader"];
 
   let hps = {},
+      damages = {},
       selectedHero,
       selectedVillain;
 
   let BobaFett = {
     class:      "Villain",
-    hp:         150,
+    hp:         110,
     attackMax:  25,
     getHP: function() {
       return this.hp;
@@ -22,8 +23,8 @@ $(function(){
   }
   let DarthVader = {
     class:      "Villain",
-    hp:         200,
-    attackMax:  30,
+    hp:         150,
+    attackMax:  25,
     getHP: function() {
       return this.hp;
     },
@@ -33,7 +34,7 @@ $(function(){
   }
   let HanSolo = {
     class:      "Hero",
-    hp:         90,
+    hp:         100,
     attackMax:  20,
     getHP: function() {
       return this.hp;
@@ -55,7 +56,7 @@ $(function(){
   }
 
   // attack
-  // takes two args: player and enemy
+  // takes two  args: player and enemy
   const attack = (player, enemy) => {
     let template,
         playerHPAttack,
@@ -76,9 +77,16 @@ $(function(){
         enemyHPAttack =  DarthVader.getAttack();
         break;
     }
-    template = `<li><strong class="playerLabel">${player}</strong> attacked <strong class="enemyLabel">${enemy}</strong> for ${playerHPAttack} points</li>`;
-    template += `<li><strong class="enemyLabel">${enemy}</strong> attacked <strong class="playerLabel">${player}</strong> for ${enemyHPAttack} points</li>`;
+    template = `<li>
+                  <strong class="playerLabel">${player}</strong> attacked <strong class="enemyLabel">${enemy}</strong> for <span class="badge badge-success">${playerHPAttack}</span>
+                </li>`;
+    template += `<li class="text-right">
+                  <strong class="enemyLabel">${enemy}</strong> attacked <strong class="playerLabel">${player}</strong> for <span class="badge badge-danger">${enemyHPAttack}</span>
+                </li>`;
     $("#playByPlay").append(template);
+    if (playerHPAttack) damages["player"] = playerHPAttack;
+    if (enemyHPAttack) damages["enemy"] = enemyHPAttack;
+    return damages;
   }
   // displays stats
   // takes two args: the target selector and selected player
@@ -86,7 +94,7 @@ $(function(){
     let template;
     switch (player) {
       case "Boba Fett":
-        template = `<div class="lifeBar">
+        template = `<div id="BobaFett" class="lifeBar">
                       <div style="width: calc(100% - 4px)"></div>
                     </div>
                     <div class="d-flex row">
@@ -96,7 +104,7 @@ $(function(){
         $(selector).find('.stats').html(template);
         break;
       case "Darth Vader":
-        template = `<div class="lifeBar">
+        template = `<div id="DarthVader" class="lifeBar">
                       <div style="width: calc(100% - 4px)"></div>
                     </div>
                     <div class="d-flex row">
@@ -106,7 +114,7 @@ $(function(){
         $(selector).find('.stats').html(template);
         break;
       case "Han Solo":
-        template = `<div class="lifeBar">
+        template = `<div id="HanSolo" class="lifeBar">
                       <div style="width: calc(100% - 4px)"></div>
                     </div>
                     <div class="d-flex row">
@@ -116,7 +124,7 @@ $(function(){
         $(selector).find('.stats').html(template);
         break;
       case "Luke Skywalker":
-        template = `<div class="lifeBar">
+        template = `<div id="LukeSkywalker" class="lifeBar">
                       <div style="width: calc(100% - 4px)"></div>
                     </div>
                     <div class="d-flex row">
@@ -152,8 +160,23 @@ $(function(){
     }
     if (playerHP) hps["player"] = playerHP;
     if (enemyHP) hps["enemy"] = enemyHP;
-    // console.log(hps);
     return hps;
+  }
+  const updateHP = (player, enemy) => {
+    let playerPlaceholder = $(`#${player.replace(" ", "")}`);
+    let enemyPlaceholder = $(`#${enemy.replace(" ", "")}`);
+
+    // TODO
+    // update player hp bar
+    playerPlaceholder
+      .children().css({"width": "calc(50% - 4px)"});
+    // TODO
+    // update enemy hp bar
+    enemyPlaceholder
+      .children().css({"width": "calc(50% - 4px)"});
+
+    playerPlaceholder.next().find(".hpCount").text(hps["player"]);
+    enemyPlaceholder.next().find(".hpCount").text(hps["enemy"]);
   }
   // render heroes list items
   $.each(heroes, (index, value) => {
@@ -184,14 +207,12 @@ $(function(){
       selectedHero = event.currentTarget.dataset.character;
       displayStats(".hero", selectedHero);
       storeHPs(selectedHero);
-      console.log(hps)
     }
     if (event.currentTarget.dataset.characterType === "villain") {
       selectCharacter(".villain", event.currentTarget.dataset.character);
       selectedVillain = event.currentTarget.dataset.character;
       displayStats(".villain", selectedVillain);
       storeHPs(selectedVillain);
-      console.log(hps)
     }
   });
   // attack!
@@ -201,6 +222,9 @@ $(function(){
       alert("Select a villain first");
     } else {
       attack(selectedHero, selectedVillain);
+      hps["player"] = hps["player"]-damages["enemy"];
+      hps["enemy"] = hps["enemy"]-damages["player"];
+      updateHP(selectedHero, selectedVillain);
     }
   });
 });
