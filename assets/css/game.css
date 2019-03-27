@@ -39,3 +39,11 @@ body {
 .hide {
   display: none;
 }
+
+.playerLabel {
+  color: var(--green);
+}
+
+.enemyLabel {
+  color: var(--red);
+}

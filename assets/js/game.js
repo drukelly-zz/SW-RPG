@@ -51,7 +51,27 @@ $(function(){
     }
   }
   const attack = (player, enemy) => {
+    let template,
+        playerHPAttack,
+        enemyHPAttack;
 
+    if (player === "Han Solo") {
+      playerHPAttack = HanSolo.getAttack();
+    }
+    if (player === "Luke Skywalker") {
+      playerHPAttack =  LukeSkywalker.getAttack();
+    }
+    if (enemy === "Boba Fett") {
+      enemyHPAttack = BobaFett.getAttack();
+    }
+    if (enemy === "Darth Vader") {
+      enemyHPAttack = DarthVader.getAttack();
+    }
+
+    template = `<li><strong class="playerLabel">${player}</strong> attacked <strong class="enemyLabel">${enemy}</strong> for ${playerHPAttack} points</li>`;
+    template += `<li><strong class="enemyLabel">${enemy}</strong> attacked <strong class="playerLabel">${player}</strong> for ${enemyHPAttack} points</li>`;
+
+    $("#playByPlay").append(template);
   }
   const displayStats = (selector, player) => {
     let template;
@@ -139,12 +159,12 @@ $(function(){
     }
   });
   // attack!
-  $("#Attack").on("click", (event, attackPower) => {
+  $("#Attack").on("click", (event) => {
     event.preventDefault();
     if (selectedVillain == null) {
       alert("Select a villain first");
     } else {
-      console.log("attack! " + attackPower);
+      attack(selectedHero, selectedVillain);
     }
   });
 });
