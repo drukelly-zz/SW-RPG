@@ -1,9 +1,13 @@
+// NOTE
+// A very "sticky" approach to the game
+// Search down for ADD HEROES HERE or ADD VILLAINS HERE
+// for repeatable blocks
 // TODO
 // Research and refactor to make switch cases code blocks dynamic
 // Not sure I'm digging these `switch` code blocks
 
 $(function(){
-  let heroes = ["Han Solo", "Luke Skywalker"],
+  let heroes = ["Han Solo", "Princess Leia", "Luke Skywalker"],
       villains = ["Boba Fett", "Darth Vader"];
   let hps = {},
       damages = {},
@@ -53,12 +57,24 @@ $(function(){
       return Math.floor(Math.random() * (this.attackMax - 1)) + 1;
     }
   }
+  let PrincessLeia = {
+    class:      "Hero",
+    hp:         125,
+    attackMax:  25,
+    getHP: function() {
+      return this.hp;
+    },
+    getAttack: function() {
+      return Math.floor(Math.random() * (this.attackMax - 1)) + 1;
+    }
+  }
   // attack
   // takes two  args: player and enemy
   const attack = (player, enemy) => {
     let template,
         playerHPAttack,
         enemyHPAttack;
+    // ADD HEROES HERE
     switch (player) {
       case "Han Solo":
         playerHPAttack = HanSolo.getAttack();
@@ -66,7 +82,11 @@ $(function(){
       case "Luke Skywalker":
         playerHPAttack =  LukeSkywalker.getAttack();
         break;
+      case "Princess Leia":
+        playerHPAttack =  PrincessLeia.getAttack();
+        break;
     }
+    // ADD VILLAINS HERE
     switch (enemy) {
       case "Boba Fett":
         enemyHPAttack =  BobaFett.getAttack();
@@ -91,6 +111,7 @@ $(function(){
   const displayStats = (selector, player) => {
     let template;
     switch (player) {
+      // ADD VILLAINS HERE
       case "Boba Fett":
         template = `<div id="BobaFett" class="lifeBar">
                       <div style="width: calc(100% - 4px)"></div>
@@ -111,6 +132,7 @@ $(function(){
                     </div>`;
         $(selector).find('.stats').html(template);
         break;
+      // ADD HEROES HERE
       case "Han Solo":
         template = `<div id="HanSolo" class="lifeBar">
                       <div style="width: calc(100% - 4px)"></div>
@@ -131,11 +153,21 @@ $(function(){
                     </div>`;
         $(selector).find('.stats').html(template);
         break;
+      case "Princess Leia":
+        template = `<div id="PrincessLeia" class="lifeBar">
+                      <div style="width: calc(100% - 4px)"></div>
+                    </div>
+                    <div class="d-flex row">
+                      <div class="col-8">${player}</div>
+                      <div class="col-4 hpCount space-mono text-right">${PrincessLeia.getHP()}</div>
+                    </div>`;
+        $(selector).find('.stats').html(template);
+        break;
     }
   }
   // remove character
   const removeCharacter = (player) => {
-    console.log(player.replace(" ", ""));
+    $(`a[title="${player}"]`).parent().remove();
   }
   // update figure tag with the selected character
   const selectCharacter = (selector, player) => {
@@ -147,12 +179,17 @@ $(function(){
     let playerHP,
         enemyHP;
     switch (character) {
+      // ADD HEROES HERE
       case "Han Solo":
         playerHP = HanSolo.getHP();
         break;
       case "Luke Skywalker":
         playerHP = LukeSkywalker.getHP();
         break;
+      case "Princess Leia":
+        playerHP = PrincessLeia.getHP();
+        break;
+      // ADD VILLAINS HERE
       case "Boba Fett":
         enemyHP = BobaFett.getHP();
         break;
@@ -172,6 +209,7 @@ $(function(){
     // get total hp first
     let playerTotalHP,
         enemyTotalHP;
+    // ADD HEROES HERE
     switch (player) {
       case "Han Solo":
         playerTotalHP = HanSolo.getHP(); 
@@ -179,7 +217,11 @@ $(function(){
       case "Luke Skywalker":
         playerTotalHP = LukeSkywalker.getHP();
         break;
+      case "Princess Leia":
+        playerTotalHP = PrincessLeia.getHP();
+        break;
     }
+    // ADD VILLAINS HERE
     switch (enemy) {
       case "Boba Fett":
         enemyTotalHP = BobaFett.getHP(); 
@@ -246,7 +288,6 @@ $(function(){
       hps["player"] = hps["player"]-damages["enemy"];
       hps["enemy"] = hps["enemy"]-damages["player"];
       updateHP(selectedHero, selectedVillain);
-
       if (hps["player"] < 0) {
         hps["player"] = 0;
         updateHP(selectedHero, selectedVillain);
@@ -254,13 +295,16 @@ $(function(){
         template = `<li>
                       <strong class="enemyLabel">${selectedVillain}</strong> defeated <strong class="playerLabel">${selectedHero}</strong>
                     </li>`
-        $("#playByPlay").append()
+        $("#playByPlay").html(template);
       }
       if (hps["enemy"] < 0) {
         hps["enemy"] = 0;
         updateHP(selectedHero, selectedVillain);
         removeCharacter(selectedVillain);
-        console.log("you win!");
+        template = `<li>
+                      <strong class="playerLabel">${selectedHero}</strong> defeated <strong class="enemyLabel">${selectedVillain}</strong>
+                    </li>`
+        $("#playByPlay").html(template);
       }
     }
   });
