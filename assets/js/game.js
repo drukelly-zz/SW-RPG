@@ -133,6 +133,10 @@ $(function(){
         break;
     }
   }
+  // remove character
+  const removeCharacter = (player) => {
+    console.log(player.replace(" ", ""));
+  }
   // update figure tag with the selected character
   const selectCharacter = (selector, player) => {
     let template = `<img src="assets/images/${player.replace(" ", "-").toLowerCase()}.jpg" alt="${player}" class="border border-light">`; 
@@ -242,6 +246,22 @@ $(function(){
       hps["player"] = hps["player"]-damages["enemy"];
       hps["enemy"] = hps["enemy"]-damages["player"];
       updateHP(selectedHero, selectedVillain);
+
+      if (hps["player"] < 0) {
+        hps["player"] = 0;
+        updateHP(selectedHero, selectedVillain);
+        removeCharacter(selectedHero);
+        template = `<li>
+                      <strong class="enemyLabel">${selectedVillain}</strong> defeated <strong class="playerLabel">${selectedHero}</strong>
+                    </li>`
+        $("#playByPlay").append()
+      }
+      if (hps["enemy"] < 0) {
+        hps["enemy"] = 0;
+        updateHP(selectedHero, selectedVillain);
+        removeCharacter(selectedVillain);
+        console.log("you win!");
+      }
     }
   });
 });
