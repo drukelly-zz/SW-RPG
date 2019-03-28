@@ -244,9 +244,9 @@ $(function(){
   // render heroes list items
   $.each(heroes, (index, value) => {
     let template =
-      `<li class="mr-3">
+      `<li>
         <a href="#" class="character" title="${value}" data-character="${value}" data-character-type="hero">
-          <img src="assets/images/${value.replace(" ", "-").toLowerCase()}.jpg" alt="${value}" class="border border-secondary">
+          <img src="assets/images/${value.replace(" ", "-").toLowerCase()}.jpg" alt="${value}" class="border border-light img-fluid">
         </a>
       </li>`;
     $("#heroes").append(template);
@@ -254,9 +254,9 @@ $(function(){
   // render villain list items
   $.each(villains, (index, value) => {
     let template = 
-      `<li class="mr-3">
+      `<li>
         <a href="#" class="character" title="${value}" data-character="${value}" data-character-type="villain">
-          <img src="assets/images/${value.replace(" ", "-").toLowerCase()}.jpg" alt="${value}" class="border border-secondary">
+          <img src="assets/images/${value.replace(" ", "-").toLowerCase()}.jpg" alt="${value}" class="border border-light img-fluid">
         </a>
       </li>`;
     $("#villains").append(template);
@@ -306,6 +306,14 @@ $(function(){
                     </li>`
         $("#playByPlay").html(template);
       }
+      if ($("#heroes").children().length === 0 || $("#villains").children().length === 0) {
+        $("#Reset").removeClass("hide");
+      }
     }
+  });
+  // reset!
+  $("#Reset").on("click", (event) => {
+    window.location.reload(true);
+    window.scrollY === 0;
   });
 });
